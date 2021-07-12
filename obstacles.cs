@@ -1,22 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading;
 public class obstacles : MonoBehaviour {
     public static int randY;
-    public GameObject camera;
-    public GameObject car;
-    public static GameObject spawned_car;
+    public Vector3 pos;
     void Start() {
-        SpawnCar();
-    }
-    void SpawnCar(){
+        GameObject player = GameObject.Find("player");
+        playerController player2 = player.GetComponent<playerController>();
+        pos = player2.pos;
         randY = UnityEngine.Random.Range(-3, -6);
-        spawned_car = Instantiate(car, new Vector3(UnityEngine.Random.Range(-8, 8), 7, 0), Quaternion.identity);
     }
     void Update() {
-        if (spawned_car != null) {
-            spawned_car.transform.Translate(camera.transform.up* randY * Time.deltaTime);
+        transform.Translate(pos* randY * Time.deltaTime);
+
+        //delete when gets out of distance
+        if (transform.position.y < -6){
+            Destroy(gameObject);
         }
     }
 }
