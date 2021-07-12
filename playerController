@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading;
 using UnityEngine.UI;
 public class playerController : MonoBehaviour {
+    public bool collect_points = true;
     public GameObject player;
     public Vector3 pos;
     public GameObject map;
@@ -11,6 +12,7 @@ public class playerController : MonoBehaviour {
     public int score;
     public bool dead = false;
     public Text scoreT;
+    public ParticleSystem deathP;
     void Start(){
         pos = new Vector3(0, 1, 0);
         Thread CountScore = new Thread(CS);
@@ -18,7 +20,7 @@ public class playerController : MonoBehaviour {
     }
     void CS(){
         while(true){
-            if (dead != true) {
+            if (dead != true && collect_points == true) {
                 Thread.Sleep(1000);
                 score++;
                 scoreT.text = score.ToString();
@@ -29,18 +31,25 @@ public class playerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             print("left");
             pos = transform.right * -1;
+            collect_points = false; 
         }if (Input.GetKeyDown(KeyCode.RightArrow)) {
             print("right");
             pos = transform.right;
+            collect_points = false;
         } if (Input.GetKeyDown(KeyCode.UpArrow)) {
             print("up");
             pos = transform.up;
+            collect_points = true;
+        } if (dead != true){
+            map.transform.Translate(pos * map_speed * Time.deltaTime, Space.Self);
         }
-        map.transform.Translate(pos * map_speed * Time.deltaTime, Space.Self);
     }
     void OnTriggerExit(Collider other){
-        print("unrotate");
-        player.transform.rotation = Quaternion.Euler(0, 0, 0);
+        print("exited");
+        if(other.tag == "rotate_90" || other.tag =="rotate_90_neg"){
+            player.transform.rotation = Quaternion.Euler(0, 0, 0);
+            print("unrotate");
+        }
     }
     void OnTriggerEnter(Collider other){
         print("enterd");
@@ -50,12 +59,13 @@ public class playerController : MonoBehaviour {
         } if (other.tag == "rotate_90_neg"){
             player.transform.rotation = Quaternion.Euler(0, 0, -90);
             print("rotated negitivly");
-        } if (other.tag == "death"){
+        } if (other.tag == "death" || other.tag == "car") {
             end();
         }
     }
     void end(){
-        Destroy(gameObject);
+        //Destroy(gameObject);
         dead = true;
+        deathP.Play();
     }
 }
