@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class playerController : MonoBehaviour {
-    void Start() {
-        
+    public Vector3 pos;
+    public GameObject map;
+    public int map_speed = -2;
+    void Start(){
+        pos = new Vector3(0, 1, 0);
     }
     void Update() {
         
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            print("left");
+            pos = new Vector3(1, 0, 0);
+        }if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            print("right");
+            pos = new Vector3(-1, 0, 0);
+        }
+        map.transform.Translate(pos * map_speed * Time.deltaTime);
     }
 }
