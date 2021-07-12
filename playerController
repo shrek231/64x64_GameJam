@@ -1,23 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading;
+using UnityEngine.UI;
 public class playerController : MonoBehaviour {
+    public GameObject player;
     public Vector3 pos;
     public GameObject map;
     public int map_speed = -2;
+    public int score;
+    public bool dead = false;
+    public Text scoreT;
     void Start(){
         pos = new Vector3(0, 1, 0);
+        Thread CountScore = new Thread(CS);
+        CountScore.Start();
+    }
+    void CS(){
+        while(true){
+            if (dead != true) {
+                Thread.Sleep(1000);
+                score++;
+                scoreT.text = score.ToString();
+            }
+        }
     }
     void Update() {
-        
         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             print("left");
-            pos = new Vector3(1, 0, 0);
+            pos = transform.right * -1;
         }if (Input.GetKeyDown(KeyCode.RightArrow)) {
             print("right");
-            pos = new Vector3(-1, 0, 0);
+            pos = transform.right;
+        } if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            print("up");
+            pos = transform.up;
         }
-        map.transform.Translate(pos * map_speed * Time.deltaTime);
+        map.transform.Translate(pos * map_speed * Time.deltaTime, Space.Self);
+    }
+    void OnTriggerExit(Collider other){
+        print("unrotate");
+        player.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    void OnTriggerEnter(Collider other){
+        print("enterd");
+        if (other.tag == "rotate_90"){
+            print("rotated");
+            player.transform.rotation = Quaternion.Euler(0, 0, 90);
+        } if (other.tag == "rotate_90_neg"){
+            player.transform.rotation = Quaternion.Euler(0, 0, -90);
+            print("rotated negitivly");
+        } if (other.tag == "death"){
+            end();
+        }
+    }
+    void end(){
+        Destroy(gameObject);
+        dead = true;
     }
 }
