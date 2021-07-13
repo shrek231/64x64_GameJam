@@ -16,7 +16,9 @@ public class playerController : MonoBehaviour {
     public GameObject CAR;
     public Transform map_transform;
     public Vector3 car_spawn_pos;
+    public bool car_rot = false;
     void Start(){
+        car_spawn_pos = new Vector3(0, 1, 0);
         pos = new Vector3(0, 1, 0);
         Thread CountScore = new Thread(CS);
         CountScore.Start();
@@ -52,7 +54,8 @@ public class playerController : MonoBehaviour {
         if(other.tag == "rotate_90" || other.tag =="rotate_90_neg"){
             player.transform.rotation = Quaternion.Euler(0, 0, 0);
             print("unrotate");
-            car_spawn_pos = new Vector3(0, 7, 0);
+            car_spawn_pos = new Vector3(0, 1, 0);
+            car_rot = false;
         }
     }
     void OnTriggerEnter(Collider other){
@@ -60,15 +63,17 @@ public class playerController : MonoBehaviour {
         if (other.tag == "rotate_90"){
             print("rotated");
             player.transform.rotation = Quaternion.Euler(0, 0, 90);
-            car_spawn_pos = new Vector3(7,0,0);
+            car_spawn_pos = new Vector3(1,0,0);
+            car_rot = true;
         } if (other.tag == "rotate_90_neg"){
             player.transform.rotation = Quaternion.Euler(0, 0, -90);
             print("rotated negitivly");
-            car_spawn_pos = new Vector3(-7, 0, 0);
+            car_spawn_pos = new Vector3(-1, 0, 0);
+            car_rot = true;
         } if (other.tag == "death" || other.tag == "car") {
             end();
         } if (other.tag == "car_spawner"){
-            GameObject spCa = Instantiate(CAR, car_spawn_pos, Quaternion.identity);
+            GameObject spCa = Instantiate(CAR, car_spawn_pos * 7, transform.rotation);
             spCa.transform.parent = map_transform;
             spCa.transform.localScale += new Vector3((float)0.08, (float)0.13, (float)0);
         }
