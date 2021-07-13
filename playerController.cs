@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading;
 using UnityEngine.UI;
 public class playerController : MonoBehaviour {
+    private sound soundControll;
     public bool collect_points = true;
     public GameObject player;
     public Vector3 pos;
@@ -18,6 +19,9 @@ public class playerController : MonoBehaviour {
     public Vector3 car_spawn_pos;
     public bool car_rot = false;
     void Start(){
+        GameObject soundOB = GameObject.Find("sound");
+        soundControll = soundOB.GetComponent<sound>();
+
         car_spawn_pos = new Vector3(0, 1, 0);
         pos = new Vector3(0, 1, 0);
         Thread CountScore = new Thread(CS);
@@ -82,5 +86,6 @@ public class playerController : MonoBehaviour {
         //Destroy(gameObject);
         dead = true;
         deathP.Play();
+        soundControll.death = true;
     }
 }
