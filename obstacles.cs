@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 public class obstacles : MonoBehaviour {
+    private sound soundControll;
     private bool pos;
     private int randY;
     private bool rotated = false;
     private bool crashed = false;
     public ParticleSystem smoke;
     void Start() {
+        GameObject soundOB = GameObject.Find("sound");
+        soundControll = soundOB.GetComponent<sound>();
         GameObject player = GameObject.Find("player");
         playerController player2 = player.GetComponent<playerController>();
         pos = player2.car_rot;
@@ -30,6 +33,7 @@ public class obstacles : MonoBehaviour {
         if (other.tag == "car"){
             crashed = true;
             smoke.Play();
+            soundControll.crash = true;
         }
         if (other.tag == "death"){
             print("hit/w tag");
