@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 public class obstacles : MonoBehaviour {
-    private static int randY;
+    private int randY;
     void Start() {
         GameObject player = GameObject.Find("player");
         playerController player2 = player.GetComponent<playerController>();
