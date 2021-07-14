@@ -19,7 +19,7 @@ public class playerController : MonoBehaviour {
     public GameObject CAR;
     public Transform map_transform;
     private Vector3 car_spawn_pos;
-    private bool car_rot = false;
+    public bool car_rot = false; //dont change in editor
     public double score_per_second = .1;
     public GameObject RestartButton;
     void Start(){
@@ -35,6 +35,7 @@ public class playerController : MonoBehaviour {
         while(true){
             print("THREAD LOOP");
             if(dead == true){
+                print("THREAD BREAK");
                 break;
             } if (collect_points == true) {
                 Thread.Sleep(1000);
