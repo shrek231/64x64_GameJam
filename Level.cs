@@ -30,6 +30,8 @@ public class Level : MonoBehaviour{
                 last_score -= (float)score_to_level/2;
                 current_score -= (float)score_to_level/2;
                 scrollBar.value = scrollbar;
+                File.WriteAllText("Score", scrollbar.ToString());
+                File.WriteAllText("level", textLevel.ToString());
                 if (scrollbar > score_to_level){
                     print("loop");
                 } else {
@@ -40,7 +42,5 @@ public class Level : MonoBehaviour{
             }
         }
         File.WriteAllText("lastScore", "0");
-        File.WriteAllText("Score", scrollbar.ToString());
-        File.WriteAllText("level", textLevel.ToString());
     }
 }
