@@ -7,24 +7,25 @@ using System.IO;
 using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour {
     private sound soundControll;
-    public bool collect_points = true;
+    private bool collect_points = true;
     public GameObject player;
-    public Vector3 pos;
+    private Vector3 pos;
     public GameObject map;
     public int map_speed = -2;
-    public double score;
-    public bool dead = false;
+    private double score;
+    private bool dead = false;
     public Text scoreT;
     public ParticleSystem deathP;
     public GameObject CAR;
     public Transform map_transform;
-    public Vector3 car_spawn_pos;
-    public bool car_rot = false;
-    public double score_per_second = .01;
+    private Vector3 car_spawn_pos;
+    private bool car_rot = false;
+    public double score_per_second = .1;
+    public GameObject RestartButton;
     void Start(){
+        RestartButton.SetActive(false);
         GameObject soundOB = GameObject.Find("sound");
         soundControll = soundOB.GetComponent<sound>();
-
         car_spawn_pos = new Vector3(0, 1, 0);
         pos = new Vector3(0, 1, 0);
         Thread CountScore = new Thread(CS);
@@ -98,5 +99,9 @@ public class playerController : MonoBehaviour {
         deathP.Play();
         soundControll.death = true;
         File.WriteAllText("Score", score.ToString());
+        RestartButton.SetActive(true);
+    }
+    public void Restart(){
+        SceneManager.LoadScene("mainMenu");
     }
 }
