@@ -12,7 +12,7 @@ public class playerController : MonoBehaviour {
     public Vector3 pos;
     public GameObject map;
     public int map_speed = -2;
-    public int score;
+    public double score;
     public bool dead = false;
     public Text scoreT;
     public ParticleSystem deathP;
@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour {
     public Transform map_transform;
     public Vector3 car_spawn_pos;
     public bool car_rot = false;
-    public int score_per_second = (int).01;
+    public double score_per_second = .01;
     void Start(){
         GameObject soundOB = GameObject.Find("sound");
         soundControll = soundOB.GetComponent<sound>();
@@ -30,15 +30,18 @@ public class playerController : MonoBehaviour {
         Thread CountScore = new Thread(CS);
         CountScore.Start();
     }
-    void CS(){
+    public void CS(){
         while(true){
-            if (dead != true && collect_points == true) {
+            print("THREAD LOOP");
+            if(dead == true){
+                break;
+            } if (collect_points == true) {
                 Thread.Sleep(1000);
                 score += score_per_second;
-                int DisplayScore = score * 100;
+                double DisplayScore = score * 100;
+                print("POINTS " + score);
                 scoreT.text = DisplayScore.ToString();
             }
-            //break if dead
         }
     }
     void Update() {
@@ -74,11 +77,13 @@ public class playerController : MonoBehaviour {
             player.transform.rotation = Quaternion.Euler(0, 0, 90);
             car_spawn_pos = new Vector3(1,0,0);
             car_rot = true;
+            collect_points = true;
         } if (other.tag == "rotate_90_neg"){
             player.transform.rotation = Quaternion.Euler(0, 0, -90);
             print("rotated negitivly");
             car_spawn_pos = new Vector3(-1, 0, 0);
             car_rot = true;
+            collect_points = true;
         } if (other.tag == "death" || other.tag == "car") {
             end();
         } if (other.tag == "car_spawner"){
