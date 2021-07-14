@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 using UnityEngine.UI;
+using System.IO;
+using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour {
     private sound soundControll;
     public bool collect_points = true;
@@ -18,6 +20,7 @@ public class playerController : MonoBehaviour {
     public Transform map_transform;
     public Vector3 car_spawn_pos;
     public bool car_rot = false;
+    public int score_per_second = (int).01;
     void Start(){
         GameObject soundOB = GameObject.Find("sound");
         soundControll = soundOB.GetComponent<sound>();
@@ -31,9 +34,11 @@ public class playerController : MonoBehaviour {
         while(true){
             if (dead != true && collect_points == true) {
                 Thread.Sleep(1000);
-                score++;
-                scoreT.text = score.ToString();
+                score += score_per_second;
+                int DisplayScore = score * 100;
+                scoreT.text = DisplayScore.ToString();
             }
+            //break if dead
         }
     }
     void Update() {
@@ -87,5 +92,6 @@ public class playerController : MonoBehaviour {
         dead = true;
         deathP.Play();
         soundControll.death = true;
+        File.WriteAllText("Score", score.ToString());
     }
 }
