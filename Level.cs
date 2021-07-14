@@ -8,6 +8,7 @@ public class Level : MonoBehaviour{
     public Text level;
     public int textLevel;
     public float scrollbar;
+    public int score_to_level = 2; //for example if this is 2 then after score gets to 1 it will add 1 to score
     void Start(){
         if (!File.Exists("Score")){
             File.Create("lastScore").Dispose();
@@ -20,14 +21,14 @@ public class Level : MonoBehaviour{
         float current_score = float.Parse(File.ReadAllLines("Score")[0]);
         int levelc = int.Parse(File.ReadAllLines("level")[0]);
         while (true){
-            if (current_score + last_score > 1){
+            if (current_score + last_score > score_to_level){
                 print("cs + ls > 1");
                 levelc += 1;
                 textLevel = levelc;
                 level.text = "Level:" + textLevel.ToString();
-                scrollbar = last_score + current_score - 1;
-                last_score -= .5f;
-                current_score -= .5f;
+                scrollbar = last_score + current_score - score_to_level;
+                last_score -= (float)score_to_level/2;
+                current_score -= (float)score_to_level/2;
                 scrollBar.value = scrollbar;
                 if (scrollbar > 1f){
                     print("loop");
