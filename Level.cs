@@ -30,7 +30,7 @@ public class Level : MonoBehaviour{
                 last_score -= (float)score_to_level/2;
                 current_score -= (float)score_to_level/2;
                 scrollBar.value = scrollbar;
-                if (scrollbar > 1f){
+                if (scrollbar > score_to_level){
                     print("loop");
                 } else {
                     break;
