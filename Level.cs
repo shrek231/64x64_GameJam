@@ -20,6 +20,9 @@ public class Level : MonoBehaviour{
         } float last_score = float.Parse(File.ReadAllLines("lastScore")[0]);
         float current_score = float.Parse(File.ReadAllLines("Score")[0]);
         int levelc = int.Parse(File.ReadAllLines("level")[0]);
+        level.text = "Level:" + levelc.ToString();
+        scrollbar = last_score + current_score;
+        scrollBar.value = scrollbar;
         while (true){
             if (current_score + last_score > score_to_level){
                 print("cs + ls > 1");
